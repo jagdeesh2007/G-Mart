@@ -7,7 +7,7 @@ import AdminOverview from './admin/AdminOverview';
 import AdminOrders from './admin/AdminOrders';
 import AdminProducts from './admin/AdminProducts';
 import AdminUsers from './admin/AdminUsers';
-import AdminNewProduct from './admin/AdminNewProduct';
+import AddProductModal from './admin/AddProductModal';
 
 const AdminDashboard = () => {
   const { user, logout, isAdmin } = useAuth();
@@ -15,6 +15,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isAdmin) {
@@ -28,6 +29,62 @@ const AdminDashboard = () => {
       .catch(err => console.error("Error fetching metrics:", err))
       .finally(() => setLoading(false));
   }, [isAdmin, navigate]);
+
+  const handleExport = async () => {
+    try {
+      let data = [];
+      let filename = 'export.csv';
+
+      if (activeTab === 'orders') {
+        const res = await API.get('/admin/orders');
+        data = res.data.map(o => ({ ID: o.id, Status: o.status, Amount: o.totalAmount, Date: o.createdAt }));
+        filename = 'orders_report.csv';
+      } else if (activeTab === 'users') {
+        const res = await API.get('/admin/users');
+        data = res.data.map(u => ({ ID: u.id, Name: `${u.firstName} ${u.lastName}`, Email: u.email, Role: u.role, Status: u.status }));
+        filename = 'users_report.csv';
+      } else if (activeTab === 'inventory') {
+        const res = await API.get('/products?size=1000');
+        data = res.data.content.map(p => ({ ID: p.id, Name: p.name, Price: p.price, Stock: p.stockQuantity }));
+        filename = 'inventory_report.csv';
+      } else {
+        if (!metrics) return;
+        data = [
+          { Metric: 'Total Revenue', Value: metrics.totalSales },
+          { Metric: 'Total Orders', Value: metrics.totalOrders },
+          { Metric: 'Active Orders', Value: metrics.activeOrders },
+          { Metric: 'Total Customers', Value: metrics.totalCustomers },
+          { Metric: 'Total Products', Value: metrics.totalProducts }
+        ];
+        filename = 'dashboard_metrics.csv';
+      }
+
+      if (data.length === 0) {
+        alert("No data available to export");
+        return;
+      }
+
+      const headers = Object.keys(data[0]);
+      const csvRows = [
+        headers.join(','),
+        ...data.map(row => headers.map(header => `"${String(row[header]).replace(/"/g, '""')}"`).join(','))
+      ];
+      
+      const csvContent = csvRows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Failed to export report", err);
+      alert("Failed to export report.");
+    }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -47,13 +104,6 @@ const AdminDashboard = () => {
         return <AdminProducts />;
       case 'users':
         return <AdminUsers />;
-      case 'new-product':
-        return (
-          <AdminNewProduct 
-            onSuccess={() => { setActiveTab('inventory'); }} 
-            onCancel={() => setActiveTab('inventory')} 
-          />
-        );
       default:
         return <AdminOverview metrics={metrics || {}} loading={loading} chartData={[]} />;
     }
@@ -68,7 +118,7 @@ const AdminDashboard = () => {
       <div style={{ width: '280px', backgroundColor: '#1e293b', color: '#ffffff', display: 'flex', flexDirection: 'column', padding: '24px 0' }}>
         <div style={{ padding: '0 24px', marginBottom: '40px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: '900', letterSpacing: '-0.5px', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ color: '#3b82f6' }}>Get</span>Mart <span style={{ fontSize: '12px', fontWeight: '600', backgroundColor: '#3b82f6', color: 'white', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px' }}>PRO</span>
+            <span style={{ color: '#3b82f6' }}>G</span>-Mart <span style={{ fontSize: '12px', fontWeight: '600', backgroundColor: '#3b82f6', color: 'white', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px' }}>PRO</span>
           </h1>
         </div>
 
@@ -133,25 +183,34 @@ const AdminDashboard = () => {
               {activeTab === 'orders' && 'Orders Management'}
               {activeTab === 'inventory' && 'Inventory / Catalog'}
               {activeTab === 'users' && 'User Accounts'}
-              {activeTab === 'new-product' && 'Add New Product'}
             </h2>
             <p style={{ color: '#64748b', marginTop: '6px' }}>
               {activeTab === 'overview' && "Monitor your platform's real-time performance."}
               {activeTab === 'orders' && "Manage and track customer orders."}
               {activeTab === 'inventory' && "Manage your product catalog and stock levels."}
               {activeTab === 'users' && "Manage customer and admin accounts."}
-              {activeTab === 'new-product' && "Create a new product listing in your catalog."}
             </p>
           </div>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <button className="btn-secondary" style={{ padding: '10px 16px', fontSize: '14px' }}>Export Report</button>
-            {activeTab !== 'new-product' && (
-              <button onClick={() => setActiveTab('new-product')} className="btn-primary" style={{ padding: '10px 16px', fontSize: '14px' }}>+ New Product</button>
-            )}
+            <button className="btn-secondary" onClick={handleExport} style={{ padding: '10px 16px', fontSize: '14px' }}>Export Report</button>
+            <button className="btn-primary" onClick={() => setIsAddProductModalOpen(true)} style={{ padding: '10px 16px', fontSize: '14px' }}>+ New Product</button>
           </div>
         </header>
 
         {renderContent()}
+
+        <AddProductModal 
+          isOpen={isAddProductModalOpen} 
+          onClose={() => setIsAddProductModalOpen(false)} 
+          onProductAdded={() => {
+            // Optional: You could trigger a re-fetch of metrics or just let the tabs handle their own fetching
+            if (activeTab === 'inventory') {
+              // Trigger a re-render of AdminProducts by toggling tab or using a key
+              setActiveTab('overview');
+              setTimeout(() => setActiveTab('inventory'), 10);
+            }
+          }} 
+        />
 
       </div>
     </div>

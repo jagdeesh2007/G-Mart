@@ -10,14 +10,11 @@ import com.getmart.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import com.getmart.dto.CreateProductRequest;
-import com.getmart.dto.ApiResponse;
-import com.getmart.entity.Category;
-import com.getmart.repository.CategoryRepository;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")
@@ -27,20 +24,21 @@ public class AdminController {
     private UserRepository userRepository;
 
     @Autowired
+    private com.getmart.repository.CategoryRepository categoryRepository;
+
+    @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @GetMapping("/metrics")
     public ResponseEntity<AdminMetricsDto> getDashboardMetrics() {
         long totalUsers = userRepository.count();
         long totalCustomers = userRepository.countByRole(User.Role.CUSTOMER);
         long totalOrders = orderRepository.count();
-        long activeOrders = orderRepository.countByStatusIn(List.of(Order.OrderStatus.PROCESSING, Order.OrderStatus.SHIPPED));
+        long activeOrders = orderRepository
+                .countByStatusIn(List.of(Order.OrderStatus.PROCESSING, Order.OrderStatus.SHIPPED));
         long totalProducts = productRepository.count();
 
         // Calculate total sales
@@ -70,29 +68,44 @@ public class AdminController {
         return ResponseEntity.ok(userRepository.findAll());
     }
 
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> getAllOrders() {
         return ResponseEntity.ok(orderRepository.findAllByOrderByCreatedAtDesc());
     }
 
+    /**
+     * @param request
+     * @return
+     */
+    @SuppressWarnings("null")
     @PostMapping("/products")
-    public ResponseEntity<ApiResponse> createProduct(@Valid @RequestBody CreateProductRequest request) {
-        Category category = categoryRepository.findById(request.getCategoryId()).orElse(null);
+    public ResponseEntity<com.getmart.dto.ApiResponse> createProduct(
+            @jakarta.validation.Valid @RequestBody com.getmart.dto.ProductRequest request) {
+        @SuppressWarnings("null")
+        com.getmart.entity.Category category = categoryRepository.findById(request.getCategoryId()).orElse(null);
+
         if (category == null) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, "Category not found!"));
+            return ResponseEntity.badRequest().body(new com.getmart.dto.ApiResponse(false, "Category not found!"));
         }
 
-        Product product = new Product();
-        product.setName(request.getName());
-        product.setDescription(request.getDescription());
-        product.setPrice(request.getPrice());
-        product.setStockQuantity(request.getStockQuantity());
-        product.setCategory(category);
-        product.setImageUrls("[\"" + request.getImageUrl() + "\"]");
-        product.setSpecifications("{}");
-        product.setIsActive(true);
+        String imageUrlsJson = "[]";
+        if (request.getImageUrl() != null && !request.getImageUrl().trim().isEmpty()) {
+            imageUrlsJson = "[\"" + request.getImageUrl() + "\"]";
+        }
+
+        Product product = Product.builder()
+                .name(request.getName())
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .stockQuantity(request.getStockQuantity())
+                .category(category)
+                .imageUrls(imageUrlsJson)
+                .isActive(true)
+                .build();
 
         productRepository.save(product);
-        return ResponseEntity.ok(new ApiResponse(true, "Product added successfully!"));
+
+        return ResponseEntity.ok(new com.getmart.dto.ApiResponse(true, "Product created successfully!"));
     }
 }
