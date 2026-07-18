@@ -27,6 +27,7 @@ com\getmart\entity\Order$OrderBuilder.class
 com\getmart\security\AuthEntryPointJwt.class
 com\getmart\repository\UserRepository.class
 com\getmart\security\UserDetailsImpl.class
+com\getmart\dto\ProductRequest.class
 com\getmart\entity\User$Status.class
 com\getmart\repository\AddressRepository.class
 com\getmart\dto\LoginRequest$LoginRequestBuilder.class
@@ -44,6 +45,7 @@ com\getmart\repository\OrderRepository.class
 com\getmart\repository\CartItemRepository.class
 com\getmart\BackendApplication.class
 com\getmart\entity\Category$CategoryBuilder.class
+com\getmart\controller\AdminController.class
 com\getmart\service\ProductService.class
 com\getmart\dto\ApiResponse$ApiResponseBuilder.class
 com\getmart\config\DataSeeder.class

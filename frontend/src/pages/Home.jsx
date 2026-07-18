@@ -149,7 +149,7 @@ const Home = () => {
           }}>
             <ShoppingCart size={20} />
           </div>
-          <span style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>G-Shop</span>
+          <span style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>C-Mart</span>
         </div>
 
         {/* Categories Menu */}

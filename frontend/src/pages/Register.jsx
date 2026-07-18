@@ -118,7 +118,7 @@ const Register = ({ onToggleView }) => {
             marginBottom: '20px',
             letterSpacing: '-1px'
           }}>
-            Join the G-Shop shopping circle.
+            Join the C-Mart shopping circle.
           </h1>
           <p style={{
             fontSize: '18px',
@@ -142,7 +142,7 @@ const Register = ({ onToggleView }) => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {[
                 'Free delivery on orders above ₹100',
-                'Instant 10% welcome coupon (G-SHOP10)',
+                'Instant 10% welcome coupon (C-Mart10)',
                 'Persistent cart across all your devices',
                 '24/7 dedicated customer support desk'
               ].map((benefit, index) => (
@@ -180,7 +180,7 @@ const Register = ({ onToggleView }) => {
             }}>
               <ShoppingCart size={22} />
             </div>
-            <span style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>G-Shop</span>
+            <span style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>C-Mart</span>
           </div>
 
           <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a', marginBottom: '8px' }}>Create Account</h2>

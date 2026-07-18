@@ -59,13 +59,13 @@ const Cart = () => {
     } catch (error) {
       // Fallback local validation in case API is still compiling
       const code = couponCode.toUpperCase();
-      if (code === 'G-SHOP10') {
+      if (code === 'C-Mart10') {
         if (subtotal < 50) {
           setCouponError('Minimum purchase of ₹50 required!');
           showError('Minimum purchase of ₹50 required!');
         } else {
-          setActiveCoupon({ code: 'G-SHOP10', discountType: 'PERCENTAGE', discountValue: 10, maxDiscountAmount: 20 });
-          showSuccess('G-SHOP10 (10% Off) applied!');
+          setActiveCoupon({ code: 'C-Mart10', discountType: 'PERCENTAGE', discountValue: 10, maxDiscountAmount: 20 });
+          showSuccess('C-Mart10 (10% Off) applied!');
           setCouponCode('');
         }
       } else if (code === 'WELCOME50') {
@@ -414,7 +414,7 @@ const Cart = () => {
                           type="text"
                           value={couponCode}
                           onChange={(e) => setCouponCode(e.target.value)}
-                          placeholder="G-SHOP10"
+                          placeholder="C-Mart10"
                           style={{
                             fontSize: '13px',
                             height: '38px',

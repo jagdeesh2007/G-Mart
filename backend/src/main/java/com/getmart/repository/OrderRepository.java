@@ -15,6 +15,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     
     long countByStatusIn(List<Order.OrderStatus> statuses);
     List<Order> findByStatus(Order.OrderStatus status);
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"user", "shippingAddress", "orderItems"})
     List<Order> findTop5ByOrderByCreatedAtDesc();
+    
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"user", "shippingAddress", "orderItems"})
     List<Order> findAllByOrderByCreatedAtDesc();
 }

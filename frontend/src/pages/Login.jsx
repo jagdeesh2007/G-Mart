@@ -23,7 +23,7 @@ const Login = ({ onToggleView, onForgotPassword }) => {
     setLoading(false);
     
     if (result.success) {
-      showSuccess('Welcome back to G-Shop!');
+      showSuccess('Welcome back to C-Mart!');
     } else {
       showError(result.message);
     }
@@ -112,7 +112,7 @@ const Login = ({ onToggleView, onForgotPassword }) => {
                 <ShoppingCart size={24} />
               </div>
               <div>
-                <h4 style={{ fontWeight: '700', fontSize: '16px', margin: 0 }}>G-Shop Platform</h4>
+                <h4 style={{ fontWeight: '700', fontSize: '16px', margin: 0 }}>C-Mart Platform</h4>
                 <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', margin: 0 }}>Active Store Management</p>
               </div>
             </div>
@@ -156,7 +156,7 @@ const Login = ({ onToggleView, onForgotPassword }) => {
             }}>
               <ShoppingCart size={22} />
             </div>
-            <span style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>G-Shop</span>
+            <span style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>C-Mart</span>
           </div>
 
           <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a', marginBottom: '8px' }}>Welcome Back</h2>

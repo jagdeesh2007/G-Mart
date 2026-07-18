@@ -118,7 +118,7 @@ const AdminDashboard = () => {
       <div style={{ width: '280px', backgroundColor: '#1e293b', color: '#ffffff', display: 'flex', flexDirection: 'column', padding: '24px 0' }}>
         <div style={{ padding: '0 24px', marginBottom: '40px' }}>
           <h1 style={{ fontSize: '24px', fontWeight: '900', letterSpacing: '-0.5px', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ color: '#3b82f6' }}>G</span>-Mart <span style={{ fontSize: '12px', fontWeight: '600', backgroundColor: '#3b82f6', color: 'white', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px' }}>PRO</span>
+            <span style={{ color: '#3b82f6' }}>C</span>-Mart <span style={{ fontSize: '12px', fontWeight: '600', backgroundColor: '#3b82f6', color: 'white', padding: '2px 6px', borderRadius: '4px', marginLeft: '4px' }}>PRO</span>
           </h1>
         </div>
 

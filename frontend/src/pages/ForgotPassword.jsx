@@ -110,7 +110,7 @@ const ForgotPassword = ({ onBackToLogin }) => {
             marginBottom: '40px',
             fontWeight: '400'
           }}>
-            Don't worry, it happens to all of us. Follow the simple steps to reset your password and secure your G-Shop profile.
+            Don't worry, it happens to all of us. Follow the simple steps to reset your password and secure your C-Mart profile.
           </p>
         </div>
       </div>
@@ -139,7 +139,7 @@ const ForgotPassword = ({ onBackToLogin }) => {
             }}>
               <ShoppingCart size={22} />
             </div>
-            <span style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>G-Shop</span>
+            <span style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>C-Mart</span>
           </div>
 
           <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#0f172a', marginBottom: '8px' }}>Reset Password</h2>

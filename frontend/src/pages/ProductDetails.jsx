@@ -217,7 +217,7 @@ const ProductDetails = () => {
                 letterSpacing: '1px',
                 color: '#2563eb',
                 fontWeight: '700'
-              }}>{product.brand?.name || 'G-SHOP SELECT'}</span>
+              }}>{product.brand?.name || 'C-Mart SELECT'}</span>
               <h1 style={{
                 fontSize: '32px',
                 fontWeight: '800',

@@ -183,7 +183,7 @@ const Checkout = () => {
           </div>
           <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#0f172a', marginBottom: '12px' }}>Order Confirmed!</h1>
           <p style={{ color: '#64748b', fontSize: '15px', marginBottom: '24px', lineHeight: '1.5' }}>
-            Thank you for shopping with G-Shop. Your order has been successfully placed and is being processed.
+            Thank you for shopping with C-Mart. Your order has been successfully placed and is being processed.
           </p>
           <div style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: '12px', marginBottom: '30px' }}>
             <span style={{ fontSize: '13px', color: '#64748b', fontWeight: '600' }}>ORDER ID</span>
